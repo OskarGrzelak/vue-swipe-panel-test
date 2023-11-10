@@ -9,7 +9,7 @@ const handleCloseButtonClicked = () => {
 </script>
 
 <template>
-  <main>
+  <main id="main" class="relative overflow-hidden">
     <SwipePanel v-if="showPopup" @close="handleCloseButtonClicked">
       <template #header> Test </template>
       <template #body>
@@ -70,6 +70,4 @@ const handleCloseButtonClicked = () => {
   </main>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

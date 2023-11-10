@@ -1,5 +1,5 @@
 <template>
-  <teleport to="#app">
+  <teleport to="#main">
     <div
       ref="panel"
       class="fixed w-full h-full bg-white z-10 overflow-hidden shadow-around rounded-t-xl md:rounded-3xl px-2 md:px-4"
