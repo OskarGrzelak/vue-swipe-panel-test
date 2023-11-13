@@ -8,13 +8,13 @@ const handleCloseButtonClicked = () => {
 };
 
 const toolbarHeight = computed(() => {
-  return `calc(100vh - 72px)`;
+  return `calc(100% - 72px)`;
 });
 </script>
 
 <template>
   <main id="main" class="relative overflow-hidden h-screen z-20">
-    <div class="absolute top-0 right-0 h-screen w-[100px] bg-green-300">
+    <div class="absolute top-0 right-0 h-full w-[100px] bg-green-300">
       <div
         class="overflow-auto min-w-[100px] flex flex-col"
         :style="{ height: toolbarHeight }"
