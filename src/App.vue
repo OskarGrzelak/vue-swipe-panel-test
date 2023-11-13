@@ -13,7 +13,7 @@ const toolbarHeight = computed(() => {
 </script>
 
 <template>
-  <main id="main" class="relative overflow-hidden h-screen z-20">
+  <main id="main" class="relative overflow-hidden h-full min-h-screen z-20">
     <div
       class="absolute top-0 right-0 h-full w-[100px] bg-green-300 overflow-auto"
       :style="{ height: toolbarHeight }"
