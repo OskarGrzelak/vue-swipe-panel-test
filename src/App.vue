@@ -1,15 +1,92 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import SwipePanel from "./components/SwipePanel.vue";
 
 const showPopup = ref(true);
 const handleCloseButtonClicked = () => {
   showPopup.value = false;
 };
+
+const toolbarHeight = computed(() => {
+  return `calc(100vh - 72px)`;
+});
 </script>
 
 <template>
-  <main id="main" class="relative overflow-hidden">
+  <main id="main" class="relative overflow-hidden h-screen z-20">
+    <div class="absolute top-0 right-0 h-screen w-[100px] bg-green-300">
+      <div
+        class="overflow-auto min-w-[100px] flex flex-col"
+        :style="{ height: toolbarHeight }"
+      >
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          1
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          2
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          3
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          4
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          5
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          6
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          7
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          8
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          9
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          10
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          11
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          12
+        </div>
+        <div
+          class="w-[100px] h-[100px] bg-orange-300 flex items-center justify-center flex-shrink-0 border-b"
+        >
+          13
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-0 left-0 w-full h-[72px] z-50 bg-red-300"></div>
     <SwipePanel v-if="showPopup" @close="handleCloseButtonClicked">
       <template #header> Test </template>
       <template #body>
