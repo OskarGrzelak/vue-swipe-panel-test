@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  overscroll-behavior: none;
+}
+
 body {
-  overscroll-behavior-y: none;
+  overflow-y: scroll;
 }
