@@ -47,7 +47,7 @@ onMounted(() => {
 
 <template>
   <main id="main" class="absolute inset-0 overflow-hidden z-20">
-    <div
+    <!-- <div
       class="absolute top-0 right-0 h-full w-[100px] bg-green-300 overflow-auto"
       :style="{ height: toolbarHeight }"
     >
@@ -118,7 +118,7 @@ onMounted(() => {
           13
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="absolute bottom-0 left-0 w-full h-[72px] z-50 bg-red-300"></div>
     <SwipePanel
       v-if="showPopup"
