@@ -99,6 +99,10 @@ export default {
       type: Object,
       default: null,
     },
+    blockPanel: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ["close", "change-level", "resize"],
   data() {
@@ -211,15 +215,6 @@ export default {
   },
   methods: {
     setSwipePanel() {
-      if (window.visualViewport.height < this.initialHeight) {
-        this.$refs.panel.style.height = `${window.visualViewport.height}px`;
-      } else {
-        this.$refs.panel.style.height = "";
-      }
-      this.$emit("resize", {
-        initialHeight: this.initialHeight,
-        isSmaller: window.visualViewport.height < this.initialHeight,
-      });
       this.panelHeight = this.$refs.panel.offsetHeight;
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
       this.createLevels();
@@ -232,6 +227,47 @@ export default {
         } catch (error) {
           throw new Error(`swipe panel on mounted | ${error.message}`);
         }
+
+        if (window.visualViewport.height < this.initialHeight) {
+          this.swipeToLevel("max");
+          this.$refs.panel.removeEventListener(
+            this.events[this.deviceType].down,
+            this.handleDownEvent
+          );
+          this.$refs.panel.removeEventListener(
+            this.events[this.deviceType].move,
+            this.handleMoveEvent
+          );
+          this.$refs.panel.removeEventListener(
+            this.events[this.deviceType].up,
+            this.handleSwipe
+          );
+          this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe);
+          this.$refs.panel.style.height = `${window.visualViewport.height}px`;
+        } else {
+          this.swipeToLevel("mid");
+          this.$refs.panel.addEventListener(
+            this.events[this.deviceType].down,
+            this.handleDownEvent
+          );
+          //Mousemove / touchmove
+          this.$refs.panel.addEventListener(
+            this.events[this.deviceType].move,
+            this.handleMoveEvent
+          );
+          //Stop Drawing
+          this.$refs.panel.addEventListener(
+            this.events[this.deviceType].up,
+            this.handleSwipe
+          );
+
+          this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
+          this.$refs.panel.style.height = "";
+        }
+        this.$emit("resize", {
+          initialHeight: this.initialHeight,
+          isSmaller: window.visualViewport.height < this.initialHeight,
+        });
       });
     },
     isTouchDevice() {
