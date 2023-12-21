@@ -227,7 +227,7 @@ export default {
 
       this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
 
-      window.addEventListener("resize", this.setSwipePanel);
+      /* window.addEventListener("resize", this.setSwipePanel); */
       this.observer = createObserver(
         this.$refs.panelContent,
         this.handleContentChange
