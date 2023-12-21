@@ -1,80 +1,75 @@
 <template>
-  <teleport to="#na-mapie">
-    <div
-      id="swipe-panel"
-      ref="panel"
-      class="fixed w-full bg-white z-10 overflow-hidden shadow-around rounded-t-xl md:rounded-3xl px-2 md:px-4 overscroll-y-contain"
-      :class="[
-        isMobile ? 'swipe-panel-mobile' : 'swipe-panel-desktop',
-        classes,
-      ]"
-    >
-      <div ref="panelHeader" class="py-4 bg-white w-full">
-        <div class="flex items-center justify-between">
-          <span v-if="blink" class="absolute flex h-3 w-3 top-2 left-2">
-            <span
-              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-50"
-            ></span>
-            <span
-              class="relative inline-flex rounded-full h-3 w-3 bg-tertiary"
-            ></span>
-          </span>
-          <div class="pl-2 text-primary font-semibold md:text-lg truncate">
-            <slot name="header" />
-          </div>
-          <div class="ml-4 flex">
-            <a
-              v-if="help"
-              :href="`/pomoc/${help}`"
-              target="_blank"
-              class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
-              @click="closePopup"
-            >
-              <question-mark-circle-icon class="h-6 w-6 text-primary" />
-            </a>
-            <button
-              v-if="currentLevel === 'min'"
-              class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
-              @click="maximize"
-            >
-              <chevron-up-icon class="h-6 w-6 text-primary" />
-            </button>
-            <button
-              v-else
-              class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
-              @click="minimize"
-            >
-              <chevron-down-icon class="h-6 w-6 text-primary" />
-            </button>
-            <button
-              class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
-              @click="close"
-            >
-              <x-icon class="h-6 w-6 text-primary" />
-            </button>
-          </div>
+  <div
+    id="swipe-panel"
+    ref="panel"
+    class="fixed w-full h-full bg-white z-10 overflow-hidden shadow-around rounded-t-xl md:rounded-3xl px-2 md:px-4"
+    :class="[isMobile ? 'swipe-panel-mobile' : 'swipe-panel-desktop', 'z-10']"
+  >
+    <div ref="panelHeader" class="py-4 bg-white w-full">
+      <div class="flex items-center justify-between">
+        <span v-if="blink" class="absolute flex h-3 w-3 top-2 left-2">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-50"
+          ></span>
+          <span
+            class="relative inline-flex rounded-full h-3 w-3 bg-tertiary"
+          ></span>
+        </span>
+        <div class="pl-2 text-primary font-semibold md:text-lg truncate">
+          <slot name="header" />
         </div>
-        <div v-if="hasActionsSlot" class="flex items-center flex-wrap mt-4">
-          <slot name="actions"></slot>
+        <div class="ml-4 flex">
+          <a
+            v-if="help"
+            :href="`/pomoc/${help}`"
+            target="_blank"
+            class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
+            @click="closePopup"
+          >
+            <question-mark-circle-icon class="h-6 w-6 text-primary" />
+          </a>
+          <button
+            v-if="currentLevel === 'min'"
+            class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
+            @click="maximize"
+          >
+            <chevron-up-icon class="h-6 w-6 text-primary" />
+          </button>
+          <button
+            v-else
+            class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
+            @click="minimize"
+          >
+            <chevron-down-icon class="h-6 w-6 text-primary" />
+          </button>
+          <button
+            class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
+            @click="close"
+          >
+            <x-icon class="h-6 w-6 text-primary" />
+          </button>
         </div>
       </div>
-      <hr />
+      <div v-if="hasActionsSlot" class="flex items-center flex-wrap mt-4">
+        <slot name="actions"></slot>
+      </div>
+    </div>
+    <hr />
+    <div
+      class="py-4"
+      :style="{ height: `calc(100% - ${panelHeaderHeight}px)` }"
+    >
       <div
-        class="py-4"
-        :style="{ height: `calc(100% - ${panelHeaderHeight}px)` }"
+        ref="panelContent"
+        class="h-full"
+        :class="{ 'overflow-y-scroll': currentLevel === 'max' }"
       >
-        <div
-          ref="panelContent"
-          class="h-full"
-          :class="{ 'overflow-y-auto': currentLevel === 'max' }"
-        >
-          <div class="relative px-2">
-            <slot name="body" />
-          </div>
+        <div class="relative px-2 h-full">
+          <slot name="body" />
         </div>
       </div>
     </div>
-  </teleport>
+  </div>
 </template>
 
 <script>
@@ -119,9 +114,9 @@ export default {
       isSwiped: false,
       events: {
         mouse: {
-          // down: "mousedown",
-          // move: "mousemove",
-          // up: "mouseup",
+          down: "mousedown",
+          move: "mousemove",
+          up: "mouseup",
         },
         touch: {
           down: "touchstart",
@@ -139,17 +134,8 @@ export default {
     };
   },
   computed: {
-    classes() {
-      return {
-        "z-10": !this.isWizard,
-        "z-0": this.isWizard,
-      };
-    },
     hasActionsSlot() {
       return !!this.$slots.actions;
-    },
-    isWizard() {
-      return this.$store && this.$store.getters.isWizard;
     },
   },
   watch: {
@@ -227,6 +213,7 @@ export default {
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
       this.createLevels();
       this.isTouchDevice();
+      console.log(this.levels);
 
       this.$nextTick(() => {
         try {
@@ -257,7 +244,9 @@ export default {
       if (this.isMobile) {
         this.levels.push({
           name: "mid",
-          value: this.panelHeight / 2,
+          value: this.isMobile
+            ? (window.innerHeight - 72) / 2
+            : window.innerHeight / 2,
         });
       }
       this.levels.push({
