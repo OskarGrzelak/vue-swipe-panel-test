@@ -1,66 +1,80 @@
 <template>
-  <div
-    ref="panel"
-    class="fixed w-full h-full bg-white z-10 overflow-hidden shadow-around rounded-t-xl md:rounded-3xl px-2 md:px-4"
-    :class="[isMobile ? 'swipe-panel-mobile' : 'swipe-panel-desktop']"
-  >
-    <div ref="panelHeader" class="py-4 bg-white w-full">
-      <div class="flex items-center justify-between">
-        <div class="pl-2 text-primary font-semibold md:text-lg truncate">
-          <slot name="header" />
-        </div>
-        <div class="ml-4 flex">
-          <a
-            v-if="help"
-            :href="`/pomoc/${help}`"
-            target="_blank"
-            class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
-            @click="closePopup"
-          >
-            <question-mark-circle-icon class="h-6 w-6 text-primary" />
-          </a>
-          <button
-            v-if="currentLevel === 'min'"
-            class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
-            @click="maximize"
-          >
-            <chevron-up-icon class="h-6 w-6 text-primary" />
-          </button>
-          <button
-            v-else
-            class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
-            @click="minimize"
-          >
-            <chevron-down-icon class="h-6 w-6 text-primary" />
-          </button>
-          <button
-            class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
-            @click="close"
-          >
-            <x-icon class="h-6 w-6 text-primary" />
-          </button>
-        </div>
-      </div>
-      <div v-if="hasActionsSlot" class="flex items-center flex-wrap mt-4">
-        <slot name="actions"></slot>
-      </div>
-    </div>
-    <hr />
+  <teleport to="#na-mapie">
     <div
-      class="py-4"
-      :style="{ height: `calc(100% - ${panelHeaderHeight}px)` }"
+      id="swipe-panel"
+      ref="panel"
+      class="fixed w-full bg-white z-10 overflow-hidden shadow-around rounded-t-xl md:rounded-3xl px-2 md:px-4 overscroll-y-contain"
+      :class="[
+        isMobile ? 'swipe-panel-mobile' : 'swipe-panel-desktop',
+        classes,
+      ]"
     >
+      <div ref="panelHeader" class="py-4 bg-white w-full">
+        <div class="flex items-center justify-between">
+          <span v-if="blink" class="absolute flex h-3 w-3 top-2 left-2">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-50"
+            ></span>
+            <span
+              class="relative inline-flex rounded-full h-3 w-3 bg-tertiary"
+            ></span>
+          </span>
+          <div class="pl-2 text-primary font-semibold md:text-lg truncate">
+            <slot name="header" />
+          </div>
+          <div class="ml-4 flex">
+            <a
+              v-if="help"
+              :href="`/pomoc/${help}`"
+              target="_blank"
+              class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
+              @click="closePopup"
+            >
+              <question-mark-circle-icon class="h-6 w-6 text-primary" />
+            </a>
+            <button
+              v-if="currentLevel === 'min'"
+              class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
+              @click="maximize"
+            >
+              <chevron-up-icon class="h-6 w-6 text-primary" />
+            </button>
+            <button
+              v-else
+              class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
+              @click="minimize"
+            >
+              <chevron-down-icon class="h-6 w-6 text-primary" />
+            </button>
+            <button
+              class="w-8 h-8 md:rounded-lg md:h-7 md:w-7 md:border-transparent md:hover:border-primary transition-colors flex items-center justify-center ml-2"
+              @click="close"
+            >
+              <x-icon class="h-6 w-6 text-primary" />
+            </button>
+          </div>
+        </div>
+        <div v-if="hasActionsSlot" class="flex items-center flex-wrap mt-4">
+          <slot name="actions"></slot>
+        </div>
+      </div>
+      <hr />
       <div
-        ref="panelContent"
-        class="h-full"
-        :class="{ 'overflow-y-auto': currentLevel === 'max' }"
+        class="py-4"
+        :style="{ height: `calc(100% - ${panelHeaderHeight}px)` }"
       >
-        <div class="relative py-4 px-2">
-          <slot name="body" />
+        <div
+          ref="panelContent"
+          class="h-full"
+          :class="{ 'overflow-y-auto': currentLevel === 'max' }"
+        >
+          <div class="relative px-2">
+            <slot name="body" />
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </teleport>
 </template>
 
 <script>
@@ -71,6 +85,7 @@ import {
   QuestionMarkCircleIcon,
 } from "@heroicons/vue/outline";
 import resizeMixin from "@/mixins/resizeMixin";
+import { createObserver } from "@/utils";
 export default {
   name: "SwipePanel",
   components: {
@@ -85,9 +100,9 @@ export default {
       type: String,
       default: "",
     },
-    panelLevel: {
-      type: String,
-      default: "",
+    swipeTo: {
+      type: Object,
+      default: null,
     },
   },
   emits: ["close", "change-level"],
@@ -104,9 +119,9 @@ export default {
       isSwiped: false,
       events: {
         mouse: {
-          down: "mousedown",
-          move: "mousemove",
-          up: "mouseup",
+          // down: "mousedown",
+          // move: "mousemove",
+          // up: "mouseup",
         },
         touch: {
           down: "touchstart",
@@ -119,86 +134,108 @@ export default {
       levels: [],
       currentLevel: "max",
       threshold: 50,
+      observer: null,
+      blink: false,
     };
   },
   computed: {
+    classes() {
+      return {
+        "z-10": !this.isWizard,
+        "z-0": this.isWizard,
+      };
+    },
     hasActionsSlot() {
       return !!this.$slots.actions;
     },
+    isWizard() {
+      return this.$store && this.$store.getters.isWizard;
+    },
   },
   watch: {
-    currentLevel(level) {
-      const value =
-        window.innerHeight -
-        this.levels.find((item) => item.name === level).value;
-      this.$emit("change-level", value);
+    swipeTo: {
+      handler(swipe) {
+        if (
+          swipe &&
+          swipe.level &&
+          (!swipe.from ||
+            !swipe.from.length ||
+            swipe.from.includes(this.currentLevel))
+        )
+          try {
+            this.swipeToLevel(swipe.level);
+          } catch (error) {
+            throw new Error(`swipe panel on tool request | ${error.message}`);
+          }
+        else this.emitOffsetValue();
+      },
+      deep: true,
     },
-    panelLevel(level) {
-      if (level) this.swipeToLevel(level);
+    currentLevel(lvl) {
+      if (lvl !== "min") this.blink = false;
     },
   },
   mounted() {
-    this.panelHeight = this.$refs.panel.offsetHeight;
-    this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
-    this.createLevels();
-    this.isTouchDevice();
+    this.setSwipePanel();
 
-    console.log(this.levels);
+    this.$nextTick(() => {
+      //Start Swipe
+      this.$refs.panel.addEventListener(
+        this.events[this.deviceType].down,
+        this.handleDownEvent
+      );
+      //Mousemove / touchmove
+      this.$refs.panel.addEventListener(
+        this.events[this.deviceType].move,
+        this.handleMoveEvent
+      );
+      //Stop Drawing
+      this.$refs.panel.addEventListener(
+        this.events[this.deviceType].up,
+        this.handleSwipe
+      );
 
-    const lvl = this.isMobile
-      ? this.levels.find((item) => item.name === "mid")
-      : this.levels.find((item) => item.name === "max");
-    this.currentLevel = lvl.name;
-    this.translationY = lvl.value;
-    this.transform();
-    this.absoluteTranslationY = this.translationY;
+      this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
 
-    //Start Swipe
-    this.$refs.panel.addEventListener(
+      window.addEventListener("resize", this.setSwipePanel);
+      this.observer = createObserver(
+        this.$refs.panelContent,
+        this.handleContentChange
+      );
+    });
+  },
+  beforeUnmount() {
+    this.$refs.panel.removeEventListener(
       this.events[this.deviceType].down,
-      (event) => {
-        this.isSwiped = true;
-        //Get X and Y Position
-        this.getXY(event);
-        this.initialX = this.mouseX;
-        this.initialY = this.mouseY;
-      }
+      this.handleDownEvent
     );
-    //Mousemove / touchmove
-    this.$refs.panel.addEventListener(
+    this.$refs.panel.removeEventListener(
       this.events[this.deviceType].move,
-      (event) => {
-        if (!this.isTouchDevice()) {
-          event.preventDefault();
-        }
-        if (this.isSwiped) {
-          this.getXY(event);
-          let diffX = this.mouseX - this.initialX;
-          let diffY = this.mouseY - this.initialY;
-          if (Math.abs(diffY) > Math.abs(diffX)) {
-            this.direction = diffY > 0 ? "down" : "up";
-            if (
-              this.direction === "down" &&
-              this.$refs.panelContent.scrollTop > 0
-            )
-              return;
-
-            this.$refs.panel.classList.remove("transition");
-            this.translationY = diffY + this.absoluteTranslationY;
-            this.transform();
-          }
-        }
-      }
+      this.handleMoveEvent
     );
-    //Stop Drawing
-    this.$refs.panel.addEventListener(
+    this.$refs.panel.removeEventListener(
       this.events[this.deviceType].up,
       this.handleSwipe
     );
-
-    this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
+    this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe);
+    window.removeEventListener("resize", this.setSwipePanel);
+    this.observer.disconnect();
   },
   methods: {
+    setSwipePanel() {
+      this.panelHeight = this.$refs.panel.offsetHeight;
+      this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
+      this.createLevels();
+      this.isTouchDevice();
+
+      this.$nextTick(() => {
+        try {
+          this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
+        } catch (error) {
+          throw new Error(`swipe panel on mounted | ${error.message}`);
+        }
+      });
+    },
     isTouchDevice() {
       try {
         //We try to create TouchEvent (it would fail for desktops and throw error)
@@ -215,13 +252,12 @@ export default {
       this.mouseY = !this.isTouchDevice() ? e.pageY : e.touches[0].pageY;
     },
     createLevels() {
+      this.levels = [];
       this.levels.push({ name: "max", value: 0 });
       if (this.isMobile) {
         this.levels.push({
           name: "mid",
-          value: this.isMobile
-            ? (window.innerHeight - 72) / 2
-            : window.innerHeight / 2,
+          value: this.panelHeight / 2,
         });
       }
       this.levels.push({
@@ -269,44 +305,126 @@ export default {
       }
     },
     transform() {
-      let value = this.translationY;
-      if (this.translationY < 0) value = 0;
-      if (this.translationY > this.levels[this.levels.length - 1].value)
-        value = this.levels[this.levels.length - 1].value;
-      this.$refs.panel.style.webkitTransform = `translateY(${value}px)`;
-      this.$refs.panel.style.MozTransform = `translateY(${value}px)`;
-      this.$refs.panel.style.msTransform = `translateY(${value}px)`;
-      this.$refs.panel.style.transform = `translateY(${value}px)`;
+      try {
+        let value = this.translationY;
+        if (this.translationY < 0) value = 0;
+        if (this.translationY > this.levels[this.levels.length - 1].value)
+          value = this.levels[this.levels.length - 1].value;
+        if (!this.$refs.panel) throw new Error("this.$refs.panel is null");
+        this.$refs.panel.style.webkitTransform = `translateY(${value}px)`;
+        this.$refs.panel.style.MozTransform = `translateY(${value}px)`;
+        this.$refs.panel.style.msTransform = `translateY(${value}px)`;
+        this.$refs.panel.style.transform = `translateY(${value}px)`;
+      } catch (error) {
+        throw new Error(`transforming this.$refs.panel | ${error.message}`, {
+          cause: error,
+        });
+      }
     },
-    handleSwipe() {
-      this.isSwiped = false;
-      if (this.direction === "down" && this.$refs.panelContent.scrollTop > 0)
-        return;
+    handleSwipe(e) {
       let diffY = this.mouseY - this.initialY;
+      if (!diffY) return;
       const testValue = diffY + this.absoluteTranslationY;
       const lvl = this.findLevel(testValue, this.direction);
       if (!lvl) return;
-      this.currentLevel = lvl.name;
-      this.translationY = lvl.value;
-      this.transform();
-      this.absoluteTranslationY = this.translationY;
+      this.isSwiped = false;
+      try {
+        if (!this.$refs.panelContent)
+          throw new Error("this.$refs.panelContent is null");
+        if (this.direction === "down" && this.$refs.panelContent.scrollTop > 0)
+          return;
+        this.currentLevel = lvl.name;
+        this.translationY = lvl.value;
+        this.transform();
+        this.absoluteTranslationY = this.translationY;
+        this.emitOffsetValue();
+      } catch (error) {
+        throw new Error(
+          `event type: ${e.type} | handle swipe ${this.direction} to ${lvl.name} | ${error.message}`
+        );
+      }
+    },
+    handleDownEvent(e) {
+      this.isSwiped = true;
+      //Get X and Y Position
+      this.getXY(e);
+      this.initialX = this.mouseX;
+      this.initialY = this.mouseY;
+    },
+    handleMoveEvent(e) {
+      if (!this.isTouchDevice()) {
+        e.preventDefault();
+      }
+      if (this.isSwiped) {
+        this.getXY(e);
+        let diffX = this.mouseX - this.initialX;
+        let diffY = this.mouseY - this.initialY;
+        try {
+          if (Math.abs(diffY) > Math.abs(diffX)) {
+            this.direction = diffY > 0 ? "down" : "up";
+            if (!this.$refs.panelContent)
+              throw new Error("this.$refs.panelContent is null");
+            if (
+              this.direction === "down" &&
+              this.$refs.panelContent.scrollTop > 0
+            )
+              return;
+
+            this.$refs.panel.classList.remove("transition");
+            this.translationY = diffY + this.absoluteTranslationY;
+            this.transform();
+          }
+        } catch (error) {
+          throw new Error(
+            `event type: ${e.type} |
+              handle move event:
+              mouseX: ${this.mouseX},
+              mouseY: ${this.mouseY},
+              initialX: ${this.initialX},
+              initialY: ${this.initialY} |
+              ${error.message}`
+          );
+        }
+      }
     },
     minimize() {
-      this.swipeToLevel("min");
+      try {
+        this.swipeToLevel("min");
+      } catch (error) {
+        throw new Error(`swipe panel on min click | ${error.message}`);
+      }
     },
     maximize() {
-      this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
+      try {
+        this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
+      } catch (error) {
+        throw new Error(`swipe panel on max click | ${error.message}`);
+      }
     },
     swipeToLevel(level) {
-      const lvl = this.levels.find((item) => item.name === level);
-      if (!lvl) return;
-      this.currentLevel = lvl.name;
-      this.translationY = lvl.value;
-      this.transform();
-      this.absoluteTranslationY = this.translationY;
+      try {
+        const lvl = this.levels.find((item) => item.name === level);
+        if (!lvl) return;
+        this.currentLevel = lvl.name;
+        this.translationY = lvl.value;
+        this.transform();
+        this.absoluteTranslationY = this.translationY;
+        this.emitOffsetValue();
+      } catch (error) {
+        throw new Error(`swipe to level ${level} | ${error.message}`);
+      }
+    },
+    emitOffsetValue() {
+      const value =
+        window.innerHeight -
+        this.levels.find((item) => item.name === this.currentLevel).value;
+      this.$emit("change-level", value);
     },
     close() {
       this.$emit("close");
+    },
+    handleContentChange() {
+      if (this.currentLevel === "min") this.blink = true;
     },
   },
 };

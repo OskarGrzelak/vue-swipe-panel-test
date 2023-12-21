@@ -129,7 +129,7 @@ const toolbarHeight = computed(() => {
           pretium. Curabitur nulla sem, imperdiet a tincidunt et, dapibus sit
           amet dui.
         </p>
-        <input type="tel" name="text" id="text">
+        <input type="text" name="text" id="text">
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel
