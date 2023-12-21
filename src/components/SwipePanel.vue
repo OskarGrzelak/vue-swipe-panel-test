@@ -184,7 +184,6 @@ export default {
         this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe);
       } else {
         console.log("unblock")
-        this.swipeToLevel("mid");
         this.$refs.panel.addEventListener(
           this.events[this.deviceType].down,
           this.handleDownEvent
