@@ -2,7 +2,7 @@
   <div
     id="swipe-panel"
     ref="panel"
-    class="fixed w-full h-full bg-white z-10 overflow-hidden shadow-around rounded-t-xl md:rounded-3xl px-2 md:px-4"
+    class="static w-full h-full bg-white z-10 overflow-hidden shadow-around rounded-t-xl md:rounded-3xl px-2 md:px-4"
     :class="[isMobile ? 'swipe-panel-mobile' : 'swipe-panel-desktop', 'z-10']"
   >
     <div ref="panelHeader" class="py-4 bg-white w-full">
