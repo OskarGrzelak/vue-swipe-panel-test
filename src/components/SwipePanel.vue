@@ -169,7 +169,7 @@ export default {
       if (bool) {
         console.log("block")
         this.swipeToLevel("max");
-        this.$refs.panel.removeEventListener(
+        /* this.$refs.panel.removeEventListener(
           this.events[this.deviceType].down,
           this.handleDownEvent
         );
@@ -181,25 +181,23 @@ export default {
           this.events[this.deviceType].up,
           this.handleSwipe
         );
-        this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe);
+        this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe); */
       } else {
-        console.log("unblock")
+        /* console.log("unblock")
         this.$refs.panel.addEventListener(
           this.events[this.deviceType].down,
           this.handleDownEvent
         );
-        //Mousemove / touchmove
         this.$refs.panel.addEventListener(
           this.events[this.deviceType].move,
           this.handleMoveEvent
         );
-        //Stop Drawing
         this.$refs.panel.addEventListener(
           this.events[this.deviceType].up,
           this.handleSwipe
         );
 
-        this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
+        this.$refs.panel.addEventListener("mouseleave", this.handleSwipe); */
       }
     },
   },
