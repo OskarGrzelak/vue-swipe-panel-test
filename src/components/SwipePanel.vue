@@ -244,7 +244,10 @@ export default {
           );
           this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe);
           this.$refs.panel.style.height = `${window.visualViewport.height}px`;
-          document.querySelector("#main").style.height = `${window.visualViewport.height}px`;
+          document.querySelector(
+            "#main"
+          ).style.height = `${window.visualViewport.height}px`;
+          document.body.style.overflowY = "hidden";
         } else {
           this.swipeToLevel("mid");
           this.$refs.panel.addEventListener(
@@ -265,6 +268,7 @@ export default {
           this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
           this.$refs.panel.style.height = "";
           document.querySelector("#main").style.height = "";
+          document.body.style.overflowY = "";
         }
         this.$emit("resize", {
           initialHeight: this.initialHeight,
