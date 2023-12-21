@@ -212,21 +212,8 @@ export default {
   methods: {
     setSwipePanel() {
       if (window.visualViewport.height < this.initialHeight) {
-        document.documentElement.style.setProperty("overflow", "auto");
-        const metaViewport = document.querySelector("meta[name=viewport]");
-        metaViewport.setAttribute(
-          "content",
-          "height=" +
-            parseInt(window.visualViewport.height) +
-            "px, width=device-width, initial-scale=1.0"
-        );
         this.$refs.panel.style.height = `${window.visualViewport.height}px`;
       } else {
-        const metaViewport = document.querySelector("meta[name=viewport]");
-        metaViewport.setAttribute(
-          "content",
-          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, height=device-height"
-        );
         this.$refs.panel.style.height = "";
       }
       this.$emit("resize", {
