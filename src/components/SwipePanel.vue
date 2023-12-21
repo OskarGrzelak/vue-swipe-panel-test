@@ -2,7 +2,7 @@
   <div
     id="swipe-panel"
     ref="panel"
-    class="static w-full h-full bg-white z-10 overflow-hidden shadow-around rounded-t-xl md:rounded-3xl px-2 md:px-4"
+    class="absolute bottom-0 left-0 w-full h-full bg-white z-10 overflow-hidden shadow-around rounded-t-xl md:rounded-3xl px-2 md:px-4"
     :class="[isMobile ? 'swipe-panel-mobile' : 'swipe-panel-desktop', 'z-10']"
   >
     <div ref="panelHeader" class="py-4 bg-white w-full">
@@ -222,7 +222,7 @@ export default {
         );
         const body = document.body;
         body.style.overflow = "hidden";
-        document.querySelector("#main").style.position = "static";
+        document.querySelector("#main").style.position = "relative";
         document.querySelector("#main").style.height = "100vh";
       } else {
         const metaViewport = document.querySelector("meta[name=viewport]");
