@@ -222,6 +222,8 @@ export default {
         );
         const body = document.body;
         body.style.overflow = "hidden";
+        document.querySelector("#main").style.position = "static";
+        document.querySelector("#main").style.height = "100vh";
       } else {
         const metaViewport = document.querySelector("meta[name=viewport]");
         metaViewport.setAttribute(
@@ -230,6 +232,8 @@ export default {
         );
         const body = document.body;
         body.style.overflow = "";
+        document.querySelector("#main").style.position = "";
+        document.querySelector("#main").style.height = "";
       }
       this.$emit("resize", {
         initialHeight: this.initialHeight,
