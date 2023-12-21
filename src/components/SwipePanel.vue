@@ -167,7 +167,7 @@ export default {
     },
     blockPanel(bool) {
       if (bool) {
-        console.log("block")
+        console.log("block");
         this.swipeToLevel("max");
         /* this.$refs.panel.removeEventListener(
           this.events[this.deviceType].down,
@@ -202,6 +202,9 @@ export default {
     },
   },
   mounted() {
+    if ("virtualKeyboard" in navigator) {
+      navigator.virtualKeyboard.overlaysContent = true;
+    }
     this.initialHeight = window.innerHeight;
     this.setSwipePanel();
 
