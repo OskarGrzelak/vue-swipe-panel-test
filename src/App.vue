@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import SwipePanel from "./components/SwipePanel.vue";
 
 const showPopup = ref(true);
@@ -9,6 +9,11 @@ const handleCloseButtonClicked = () => {
 
 const toolbarHeight = computed(() => {
   return `calc(100% - 72px)`;
+});
+
+const height = ref(null);
+onMounted(() => {
+  height.value = window.innerHeight;
 });
 </script>
 
@@ -90,6 +95,7 @@ const toolbarHeight = computed(() => {
     <SwipePanel v-if="showPopup" @close="handleCloseButtonClicked">
       <template #header> Test </template>
       <template #body>
+        <p>{{ height }}</p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel
@@ -129,7 +135,7 @@ const toolbarHeight = computed(() => {
           pretium. Curabitur nulla sem, imperdiet a tincidunt et, dapibus sit
           amet dui.
         </p>
-        <input type="text" name="text" id="text">
+        <input type="text" name="text" id="text" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel

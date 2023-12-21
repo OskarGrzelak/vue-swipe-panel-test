@@ -217,14 +217,14 @@ export default {
         metaViewport.setAttribute(
           "content",
           "height=" +
-            this.initialHeight +
+            window.innerHeight +
             "px, width=device-width, initial-scale=1.0"
         );
       } else {
         const metaViewport = document.querySelector("meta[name=viewport]");
         metaViewport.setAttribute(
           "content",
-          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, height=device-height"
         );
       }
       this.panelHeight = this.$refs.panel.offsetHeight;
