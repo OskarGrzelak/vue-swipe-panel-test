@@ -19,8 +19,29 @@ const handleResize = (payload) => {
 };
 
 const height = ref(null);
+const width = ref(null);
+const isResized = ref(null);
+const newWidth = ref(null);
+const newHeight = ref(null);
 onMounted(() => {
   height.value = window.innerHeight;
+  width.value = window.innerWidth;
+
+  window.addEventListener("resize", (e) => {
+    if (newHeight.value) height.value = newHeight.value;
+    if (newWidth.value) width.value = newWidth.value;
+    console.log(e);
+    if (
+      width.value !== window.innerWidth ||
+      height.value !== window.innerHeight
+    ) {
+      isResized.value = true;
+    } else {
+      isResized.value = false;
+    }
+    newWidth.value = window.innerWidth;
+    newHeight.value = window.innerHeight;
+  });
 });
 </script>
 
@@ -106,9 +127,13 @@ onMounted(() => {
     >
       <template #header> Test </template>
       <template #body>
-        <p>window height: {{ height }}</p>
         <p>initial height: {{ initialHeight }}</p>
+        <p>window height: {{ height }}</p>
+        <p>new window height: {{ newHeight }}</p>
+        <p>window width: {{ width }}</p>
+        <p>new window width: {{ newWidth }}</p>
         <p>is smaller: {{ isSmaller }}</p>
+        <p>is resized: {{ isResized }}</p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel
