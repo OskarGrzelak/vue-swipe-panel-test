@@ -243,15 +243,15 @@ export default {
             this.handleSwipe
           );
           this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe);
-          this.$refs.panel.style.height = `${window.visualViewport.height}px`;
-          document.querySelector(
+          /* this.$refs.panel.style.height = `${window.visualViewport.height}px`; */
+          /* document.querySelector(
             "#main"
-          ).style.height = `${window.visualViewport.height}px`;
+          ).style.height = `${window.visualViewport.height}px`; */
           document.querySelector("#app").style.overflowY = "hidden";
-          document.querySelector(
+          /* document.querySelector(
             "#app"
-          ).style.height = `${window.visualViewport.height}px`;
-          document.body.style.height = `${window.visualViewport.height}px`;
+          ).style.height = `${window.visualViewport.height}px`; */
+          /* document.body.style.height = `${window.visualViewport.height}px`; */
           document.body.style.overflowY = "hidden";
         } else {
           this.swipeToLevel("mid");
@@ -271,11 +271,11 @@ export default {
           );
 
           this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
-          this.$refs.panel.style.height = "";
-          document.querySelector("#main").style.height = "";
+          /* this.$refs.panel.style.height = ""; */
+          /* document.querySelector("#main").style.height = ""; */
           document.querySelector("#app").style.overflowY = "";
-          document.querySelector("#app").style.height = "";
-          document.body.style.height = "";
+          /* document.querySelector("#app").style.height = ""; */
+          /* document.body.style.height = ""; */
           document.body.style.overflowY = "";
         }
         this.$emit("resize", {
