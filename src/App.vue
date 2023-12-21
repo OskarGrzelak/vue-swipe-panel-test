@@ -11,6 +11,13 @@ const toolbarHeight = computed(() => {
   return `calc(100% - 72px)`;
 });
 
+const initialHeight = ref(null);
+const isSmaller = ref(null);
+const handleResize = (payload) => {
+  initialHeight.value = payload.initialHeight;
+  isSmaller.value = payload.isSmaller;
+};
+
 const height = ref(null);
 onMounted(() => {
   height.value = window.innerHeight;
@@ -92,10 +99,16 @@ onMounted(() => {
       </div>
     </div>
     <div class="absolute bottom-0 left-0 w-full h-[72px] z-50 bg-red-300"></div>
-    <SwipePanel v-if="showPopup" @close="handleCloseButtonClicked">
+    <SwipePanel
+      v-if="showPopup"
+      @close="handleCloseButtonClicked"
+      @resize="handleResize"
+    >
       <template #header> Test </template>
       <template #body>
-        <p>{{ height }}</p>
+        <p>window height: {{ height }}</p>
+        <p>initial height: {{ initialHeight }}</p>
+        <p>is smaller: {{ isSmaller }}</p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel

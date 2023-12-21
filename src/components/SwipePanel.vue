@@ -100,7 +100,7 @@ export default {
       default: null,
     },
   },
-  emits: ["close", "change-level"],
+  emits: ["close", "change-level", "resize"],
   data() {
     return {
       mouseX: 0,
@@ -227,6 +227,10 @@ export default {
           "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, height=device-height"
         );
       }
+      this.$emit("resize", {
+        initialHeight: this.initialHeight,
+        isSmaller: window.innerHeight < this.initialHeight,
+      });
       this.panelHeight = this.$refs.panel.offsetHeight;
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
       this.createLevels();
