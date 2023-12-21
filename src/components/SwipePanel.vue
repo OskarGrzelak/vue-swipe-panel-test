@@ -131,6 +131,7 @@ export default {
       threshold: 50,
       observer: null,
       blink: false,
+      initialHeight: null,
     };
   },
   computed: {
@@ -162,6 +163,7 @@ export default {
     },
   },
   mounted() {
+    this.initialHeight = window.innerHeight;
     this.setSwipePanel();
 
     this.$nextTick(() => {
@@ -209,12 +211,22 @@ export default {
   },
   methods: {
     setSwipePanel() {
-      document.documentElement.style.setProperty("overflow", "auto");
-      const metaViewport = document.querySelector("meta[name=viewport]");
-      metaViewport.setAttribute(
-        "content",
-        "height=" + initialHeight + "px, width=device-width, initial-scale=1.0"
-      );
+      if (window.innerHeight < this.initialHeight) {
+        document.documentElement.style.setProperty("overflow", "auto");
+        const metaViewport = document.querySelector("meta[name=viewport]");
+        metaViewport.setAttribute(
+          "content",
+          "height=" +
+            this.initialHeight +
+            "px, width=device-width, initial-scale=1.0"
+        );
+      } else {
+        const metaViewport = document.querySelector("meta[name=viewport]");
+        metaViewport.setAttribute(
+          "content",
+          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+        );
+      }
       this.panelHeight = this.$refs.panel.offsetHeight;
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
       this.createLevels();
