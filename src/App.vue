@@ -24,7 +24,7 @@ const isResized = ref(null);
 const newWidth = ref(null);
 const newHeight = ref(null);
 onMounted(() => {
-  height.value = window.innerHeight;
+  height.value = window.visualViewport.height;
   width.value = window.innerWidth;
 
   window.addEventListener("resize", (e) => {
@@ -33,14 +33,14 @@ onMounted(() => {
     console.log(e);
     if (
       width.value !== window.innerWidth ||
-      height.value !== window.innerHeight
+      height.value !== window.visualViewport.height
     ) {
       isResized.value = true;
     } else {
       isResized.value = false;
     }
     newWidth.value = window.innerWidth;
-    newHeight.value = window.innerHeight;
+    newHeight.value = window.visualViewport.height;
   });
 });
 </script>
