@@ -165,6 +165,44 @@ export default {
     currentLevel(lvl) {
       if (lvl !== "min") this.blink = false;
     },
+    blockPanel(bool) {
+      if (bool) {
+        console.log("block")
+        this.swipeToLevel("max");
+        this.$refs.panel.removeEventListener(
+          this.events[this.deviceType].down,
+          this.handleDownEvent
+        );
+        this.$refs.panel.removeEventListener(
+          this.events[this.deviceType].move,
+          this.handleMoveEvent
+        );
+        this.$refs.panel.removeEventListener(
+          this.events[this.deviceType].up,
+          this.handleSwipe
+        );
+        this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe);
+      } else {
+        console.log("unblock")
+        this.swipeToLevel("mid");
+        this.$refs.panel.addEventListener(
+          this.events[this.deviceType].down,
+          this.handleDownEvent
+        );
+        //Mousemove / touchmove
+        this.$refs.panel.addEventListener(
+          this.events[this.deviceType].move,
+          this.handleMoveEvent
+        );
+        //Stop Drawing
+        this.$refs.panel.addEventListener(
+          this.events[this.deviceType].up,
+          this.handleSwipe
+        );
+
+        this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
+      }
+    },
   },
   mounted() {
     this.initialHeight = window.innerHeight;
@@ -219,7 +257,6 @@ export default {
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
       this.createLevels();
       this.isTouchDevice();
-      console.log(this.levels);
 
       this.$nextTick(() => {
         try {
@@ -227,61 +264,6 @@ export default {
         } catch (error) {
           throw new Error(`swipe panel on mounted | ${error.message}`);
         }
-
-        if (window.visualViewport.height < this.initialHeight) {
-          this.swipeToLevel("max");
-          this.$refs.panel.removeEventListener(
-            this.events[this.deviceType].down,
-            this.handleDownEvent
-          );
-          this.$refs.panel.removeEventListener(
-            this.events[this.deviceType].move,
-            this.handleMoveEvent
-          );
-          this.$refs.panel.removeEventListener(
-            this.events[this.deviceType].up,
-            this.handleSwipe
-          );
-          this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe);
-          /* this.$refs.panel.style.height = `${window.visualViewport.height}px`; */
-          /* document.querySelector(
-            "#main"
-          ).style.height = `${window.visualViewport.height}px`; */
-          /* document.querySelector("#app").style.overflowY = "hidden"; */
-          /* document.querySelector(
-            "#app"
-          ).style.height = `${window.visualViewport.height}px`; */
-          /* document.body.style.height = `${window.visualViewport.height}px`; */
-          /* document.body.style.overflowY = "hidden"; */
-        } else {
-          this.swipeToLevel("mid");
-          this.$refs.panel.addEventListener(
-            this.events[this.deviceType].down,
-            this.handleDownEvent
-          );
-          //Mousemove / touchmove
-          this.$refs.panel.addEventListener(
-            this.events[this.deviceType].move,
-            this.handleMoveEvent
-          );
-          //Stop Drawing
-          this.$refs.panel.addEventListener(
-            this.events[this.deviceType].up,
-            this.handleSwipe
-          );
-
-          this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
-          /* this.$refs.panel.style.height = ""; */
-          /* document.querySelector("#main").style.height = ""; */
-          /* document.querySelector("#app").style.overflowY = ""; */
-          /* document.querySelector("#app").style.height = ""; */
-          /* document.body.style.height = ""; */
-          /* document.body.style.overflowY = ""; */
-        }
-        this.$emit("resize", {
-          initialHeight: this.initialHeight,
-          isSmaller: window.visualViewport.height < this.initialHeight,
-        });
       });
     },
     isTouchDevice() {

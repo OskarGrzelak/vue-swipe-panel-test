@@ -11,38 +11,7 @@ const toolbarHeight = computed(() => {
   return `calc(100% - 72px)`;
 });
 
-const initialHeight = ref(null);
-const isSmaller = ref(null);
-const handleResize = (payload) => {
-  initialHeight.value = payload.initialHeight;
-  isSmaller.value = payload.isSmaller;
-};
-
-const height = ref(null);
-const width = ref(null);
-const isResized = ref(null);
-const newWidth = ref(null);
-const newHeight = ref(null);
-onMounted(() => {
-  height.value = window.visualViewport.height;
-  width.value = window.innerWidth;
-
-  window.addEventListener("resize", (e) => {
-    if (newHeight.value) height.value = newHeight.value;
-    if (newWidth.value) width.value = newWidth.value;
-    console.log(e);
-    if (
-      width.value !== window.innerWidth ||
-      height.value !== window.visualViewport.height
-    ) {
-      isResized.value = true;
-    } else {
-      isResized.value = false;
-    }
-    newWidth.value = window.innerWidth;
-    newHeight.value = window.visualViewport.height;
-  });
-});
+const blockPanel = ref(false);
 </script>
 
 <template>
@@ -122,18 +91,12 @@ onMounted(() => {
     <div class="absolute bottom-0 left-0 w-full h-[72px] z-50 bg-red-300"></div>
     <SwipePanel
       v-if="showPopup"
+      :block-panel="blockPanel"
       @close="handleCloseButtonClicked"
       @resize="handleResize"
     >
       <template #header> Test </template>
       <template #body>
-        <p>initial height: {{ initialHeight }}</p>
-        <p>window height: {{ height }}</p>
-        <p>new window height: {{ newHeight }}</p>
-        <p>window width: {{ width }}</p>
-        <p>new window width: {{ newWidth }}</p>
-        <p>is smaller: {{ isSmaller }}</p>
-        <p>is resized: {{ isResized }}</p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel
@@ -173,7 +136,14 @@ onMounted(() => {
           pretium. Curabitur nulla sem, imperdiet a tincidunt et, dapibus sit
           amet dui.
         </p>
-        <input type="text" name="text" id="text" />
+        <input
+          type="text"
+          name="text"
+          id="text"
+          class="p-4 border border-slate-600"
+          @focus="blockPanel = true"
+          @blur="blockPanel = false"
+        />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel
