@@ -247,6 +247,10 @@ export default {
           document.querySelector(
             "#main"
           ).style.height = `${window.visualViewport.height}px`;
+          document.querySelector("#app").style.overflowY = "hidden";
+          document.querySelector(
+            "#app"
+          ).style.overflowY = `${window.visualViewport.height}px`;
           document.body.style.height = `${window.visualViewport.height}px`;
           document.body.style.overflowY = "hidden";
         } else {
@@ -269,6 +273,8 @@ export default {
           this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
           this.$refs.panel.style.height = "";
           document.querySelector("#main").style.height = "";
+          document.querySelector("#app").style.overflowY = "";
+          document.querySelector("#app").style.overflowY = "";
           document.body.style.height = "";
           document.body.style.overflowY = "";
         }
