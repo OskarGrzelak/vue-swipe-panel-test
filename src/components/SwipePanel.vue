@@ -249,11 +249,14 @@ export default {
       this.createLevels();
       this.isTouchDevice();
 
+      const currentLevel = this.currentLevel;
       this.$nextTick(() => {
         /* console.log(window.visualViewport.height, this.initialHeight);
         console.log(this.isInitiallyPortrait, isPortrait); */
         try {
-          this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
+          this.isMobile
+            ? this.swipeToLevel(currentLevel)
+            : this.swipeToLevel("max");
           this.isInitiallyPortrait = isPortrait;
         } catch (error) {
           throw new Error(`swipe panel on mounted | ${error.message}`);
