@@ -167,6 +167,12 @@ export default {
   mounted() {
     if ("virtualKeyboard" in navigator) {
       navigator.virtualKeyboard.overlaysContent = true;
+
+      navigator.virtualKeyboard.addEventListener("geometrychange", (event) => {
+        const { height } = event.target.boundingRect;
+        if (height) this.blockSwipe = true;
+        else this.blockSwipe = false;
+      });
     }
     this.isInitiallyPortrait = window.innerHeight > window.innerWidth;
     this.initialHeight = window.innerHeight;
