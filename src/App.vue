@@ -10,6 +10,8 @@ const handleCloseButtonClicked = () => {
 const toolbarHeight = computed(() => {
   return `calc(100% - 72px)`;
 });
+
+const isResized = ref(false);
 </script>
 
 <template>
@@ -90,10 +92,11 @@ const toolbarHeight = computed(() => {
     <SwipePanel
       v-if="showPopup"
       @close="handleCloseButtonClicked"
-      @resize="handleResize"
+      @resize="(v) => (this.isResized = v)"
     >
       <template #header> Test </template>
       <template #body>
+        <p>isResized: {{ isResized }}</p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel

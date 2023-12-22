@@ -223,6 +223,7 @@ export default {
   },
   methods: {
     setSwipePanel() {
+      this.$emit("resize", true);
       this.blockSwipe = false;
       this.panelHeight = this.$refs.panel.offsetHeight;
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
