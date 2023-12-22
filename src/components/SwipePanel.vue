@@ -217,29 +217,28 @@ export default {
   },
   methods: {
     setSwipePanel() {
+      this.blockSwipe = false;
       this.panelHeight = this.$refs.panel.offsetHeight;
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
       const isPortrait = window.innerHeight > window.innerWidth;
+      console.log(window.visualViewport.height, this.initialHeight);
+      console.log(this.isInitiallyPortrait, isPortrait);
+      if (
+        window.visualViewport.height < this.initialHeight &&
+        this.isInitiallyPortrait === isPortrait
+      ) {
+        this.blockSwipe = true;
+        this.swipeToLevel("max");
+        return;
+      }
       this.createLevels();
       this.isTouchDevice();
 
       this.$nextTick(() => {
-        console.log(window.visualViewport.height, this.initialHeight);
-        console.log(this.isInitiallyPortrait, isPortrait);
-        if (
-          window.visualViewport.height < this.initialHeight &&
-          this.isInitiallyPortrait === isPortrait
-        ) {
-          this.blockSwipe = true;
-        } else {
-          this.blockSwipe = false;
-        }
+        /* console.log(window.visualViewport.height, this.initialHeight);
+        console.log(this.isInitiallyPortrait, isPortrait); */
         try {
-          if (this.blockSwipe) {
-            this.swipeToLevel("max");
-          } else {
-            this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
-          }
+          this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
           this.isInitiallyPortrait = isPortrait;
         } catch (error) {
           throw new Error(`swipe panel on mounted | ${error.message}`);
