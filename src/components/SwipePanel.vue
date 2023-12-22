@@ -197,7 +197,7 @@ export default {
 
       this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
 
-      window.addEventListener("resize", this.setSwipePanel);
+      window.addEventListener("resize", this.handleResize);
       this.observer = createObserver(
         this.$refs.panelContent,
         this.handleContentChange
@@ -218,11 +218,11 @@ export default {
       this.handleSwipe
     );
     this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe);
-    window.removeEventListener("resize", this.setSwipePanel);
+    window.removeEventListener("resize", this.handleResize);
     this.observer.disconnect();
   },
   methods: {
-    setSwipePanel() {
+    handleResize() {
       this.$emit("resize", true);
       this.blockSwipe = false;
       this.panelHeight = this.$refs.panel.offsetHeight;
@@ -247,6 +247,20 @@ export default {
         try {
           this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
           this.isInitiallyPortrait = isPortrait;
+        } catch (error) {
+          throw new Error(`swipe panel on mounted | ${error.message}`);
+        }
+      });
+    },
+    setSwipePanel() {
+      this.panelHeight = this.$refs.panel.offsetHeight;
+      this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
+      this.createLevels();
+      this.isTouchDevice();
+
+      this.$nextTick(() => {
+        try {
+          this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
         } catch (error) {
           throw new Error(`swipe panel on mounted | ${error.message}`);
         }
