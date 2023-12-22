@@ -167,12 +167,6 @@ export default {
   mounted() {
     if ("virtualKeyboard" in navigator) {
       navigator.virtualKeyboard.overlaysContent = true;
-
-      navigator.virtualKeyboard.addEventListener("geometrychange", (event) => {
-        const { height } = event.target.boundingRect;
-        if (height) this.blockSwipe = true;
-        else this.blockSwipe = false;
-      });
     }
     this.isInitiallyPortrait = window.innerHeight > window.innerWidth;
     this.initialHeight = window.innerHeight;
@@ -227,11 +221,13 @@ export default {
         keyboardHeight: navigator.virtualKeyboard.boundingRect.height,
         initHeight: this.initialHeight,
         visualHeight: window.visualViewport.height,
+        isInitiallyPortrait: this.isInitiallyPortrait,
+        isPortrait: window.innerHeight > window.innerWidth,
       });
       this.blockSwipe = false;
       this.panelHeight = this.$refs.panel.offsetHeight;
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
-      const isPortrait = window.innerHeight > window.innerWidth;
+      let isPortrait = window.innerHeight > window.innerWidth;
       console.log(window.visualViewport.height, this.initialHeight);
       console.log(this.isInitiallyPortrait, isPortrait);
       if (
@@ -276,6 +272,8 @@ export default {
             keyboardHeight: navigator.virtualKeyboard.boundingRect.height,
             initHeight: this.initialHeight,
             visualHeight: window.visualViewport.height,
+            isInitiallyPortrait: this.isInitiallyPortrait,
+            isPortrait: window.innerHeight > window.innerWidth,
           });
           this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
         } catch (error) {

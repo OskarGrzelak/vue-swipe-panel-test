@@ -14,11 +14,15 @@ const toolbarHeight = computed(() => {
 const keyboardHeight = ref(null);
 const initialHeight = ref(null);
 const visualHeight = ref(null);
+const isInitiallyPortrait = ref(null);
+const isPortrait = ref(null);
 
 const handleResize = (payload) => {
   keyboardHeight.value = payload.keyboardHeight;
   initialHeight.value = payload.initHeight;
   visualHeight.value = payload.visualHeight;
+  isInitiallyPortrait.value = payload.isInitiallyPortrait;
+  isPortrait.value = payload.isPortrait;
 };
 </script>
 
@@ -107,6 +111,8 @@ const handleResize = (payload) => {
         <p>keyboard: {{ keyboardHeight }}</p>
         <p>initial: {{ initialHeight }}</p>
         <p>visual: {{ visualHeight }}</p>
+        <p>is init portrait: {{ isInitiallyPortrait }}</p>
+        <p>is portrait: {{ isPortrait }}</p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel
