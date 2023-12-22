@@ -132,7 +132,7 @@ export default {
       observer: null,
       blink: false,
       initialHeight: null,
-      isPortrait: false,
+      isInitiallyPortrait: false,
       blockSwipe: false,
     };
   },
@@ -168,7 +168,7 @@ export default {
     if ("virtualKeyboard" in navigator) {
       navigator.virtualKeyboard.overlaysContent = true;
     }
-    this.isPortrait = window.innerHeight > window.innerWidth;
+    this.isInitiallyPortrait = window.innerHeight > window.innerWidth;
     this.initialHeight = window.innerHeight;
     this.setSwipePanel();
 
@@ -191,7 +191,7 @@ export default {
 
       this.$refs.panel.addEventListener("mouseleave", this.handleSwipe);
 
-      /* window.addEventListener("resize", this.setSwipePanel); */
+      window.addEventListener("resize", this.setSwipePanel);
       this.observer = createObserver(
         this.$refs.panelContent,
         this.handleContentChange
@@ -219,26 +219,28 @@ export default {
     setSwipePanel() {
       this.panelHeight = this.$refs.panel.offsetHeight;
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
-      isPortrait = window.innerHeight > window.innerWidth;
+      const isPortrait = window.innerHeight > window.innerWidth;
       this.createLevels();
       this.isTouchDevice();
 
       this.$nextTick(() => {
+        console.log(window.visualViewport.height, this.initialHeight);
+        console.log(this.isInitiallyPortrait, isPortrait);
+        if (
+          window.visualViewport.height < this.initialHeight &&
+          this.isInitiallyPortrait === isPortrait
+        ) {
+          this.blockSwipe = true;
+        } else {
+          this.blockSwipe = false;
+        }
         try {
-          if (
-            window.visualViewport.height < this.initialHeight &&
-            this.isPortrait === isPortrait
-          ) {
+          if (this.blockSwipe) {
             this.swipeToLevel("max");
-            this.blockSwipe = true;
-          } else if (
-            window.visualViewport.height >= this.initialHeight &&
-            this.isPortrait === isPortrait
-          ) {
-            this.blockSwipe = false;
           } else {
             this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
           }
+          this.isInitiallyPortrait = isPortrait;
         } catch (error) {
           throw new Error(`swipe panel on mounted | ${error.message}`);
         }
