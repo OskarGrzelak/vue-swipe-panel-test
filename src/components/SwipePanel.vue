@@ -99,10 +99,6 @@ export default {
       type: Object,
       default: null,
     },
-    blockPanel: {
-      type: Boolean,
-      default: false,
-    },
   },
   emits: ["close", "change-level", "resize"],
   data() {
@@ -136,6 +132,8 @@ export default {
       observer: null,
       blink: false,
       initialHeight: null,
+      isPortrait: false,
+      blockSwipe: false,
     };
   },
   computed: {
@@ -165,46 +163,12 @@ export default {
     currentLevel(lvl) {
       if (lvl !== "min") this.blink = false;
     },
-    blockPanel(bool) {
-      if (bool) {
-        console.log("block");
-        this.swipeToLevel("max");
-        /* this.$refs.panel.removeEventListener(
-          this.events[this.deviceType].down,
-          this.handleDownEvent
-        );
-        this.$refs.panel.removeEventListener(
-          this.events[this.deviceType].move,
-          this.handleMoveEvent
-        );
-        this.$refs.panel.removeEventListener(
-          this.events[this.deviceType].up,
-          this.handleSwipe
-        );
-        this.$refs.panel.removeEventListener("mouseleave", this.handleSwipe); */
-      } else {
-        /* console.log("unblock")
-        this.$refs.panel.addEventListener(
-          this.events[this.deviceType].down,
-          this.handleDownEvent
-        );
-        this.$refs.panel.addEventListener(
-          this.events[this.deviceType].move,
-          this.handleMoveEvent
-        );
-        this.$refs.panel.addEventListener(
-          this.events[this.deviceType].up,
-          this.handleSwipe
-        );
-
-        this.$refs.panel.addEventListener("mouseleave", this.handleSwipe); */
-      }
-    },
   },
   mounted() {
     if ("virtualKeyboard" in navigator) {
       navigator.virtualKeyboard.overlaysContent = true;
     }
+    this.isPortrait = window.innerHeight > window.innerWidth;
     this.initialHeight = window.innerHeight;
     this.setSwipePanel();
 
@@ -255,12 +219,26 @@ export default {
     setSwipePanel() {
       this.panelHeight = this.$refs.panel.offsetHeight;
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
+      isPortrait = window.innerHeight > window.innerWidth;
       this.createLevels();
       this.isTouchDevice();
 
       this.$nextTick(() => {
         try {
-          this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
+          if (
+            window.visualViewport.height < this.initialHeight &&
+            this.isPortrait === isPortrait
+          ) {
+            this.swipeToLevel("max");
+            this.blockSwipe = true;
+          } else if (
+            window.visualViewport.height >= this.initialHeight &&
+            this.isPortrait === isPortrait
+          ) {
+            this.blockSwipe = false;
+          } else {
+            this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
+          }
         } catch (error) {
           throw new Error(`swipe panel on mounted | ${error.message}`);
         }
@@ -354,6 +332,7 @@ export default {
       }
     },
     handleSwipe(e) {
+      if (this.blockSwipe) return;
       let diffY = this.mouseY - this.initialY;
       if (!diffY) return;
       const testValue = diffY + this.absoluteTranslationY;
@@ -377,6 +356,7 @@ export default {
       }
     },
     handleDownEvent(e) {
+      if (this.blockSwipe) return;
       this.isSwiped = true;
       //Get X and Y Position
       this.getXY(e);
@@ -384,6 +364,7 @@ export default {
       this.initialY = this.mouseY;
     },
     handleMoveEvent(e) {
+      if (this.blockSwipe) return;
       if (!this.isTouchDevice()) {
         e.preventDefault();
       }

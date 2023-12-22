@@ -10,8 +10,6 @@ const handleCloseButtonClicked = () => {
 const toolbarHeight = computed(() => {
   return `calc(100% - 72px)`;
 });
-
-const blockPanel = ref(false);
 </script>
 
 <template>
@@ -91,7 +89,6 @@ const blockPanel = ref(false);
     <div class="absolute bottom-0 left-0 w-full h-[72px] z-50 bg-red-300"></div>
     <SwipePanel
       v-if="showPopup"
-      :block-panel="blockPanel"
       @close="handleCloseButtonClicked"
       @resize="handleResize"
     >
@@ -141,8 +138,6 @@ const blockPanel = ref(false);
           name="text"
           id="text"
           class="p-4 border border-slate-600"
-          @focus="blockPanel = true"
-          @blur="blockPanel = false"
         />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
