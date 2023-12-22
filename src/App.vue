@@ -92,7 +92,7 @@ const isResized = ref(false);
     <SwipePanel
       v-if="showPopup"
       @close="handleCloseButtonClicked"
-      @resize="(v) => (this.isResized = v)"
+      @resize="(v) => (isResized = v)"
     >
       <template #header> Test </template>
       <template #body>
