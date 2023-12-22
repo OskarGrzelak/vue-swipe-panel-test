@@ -223,7 +223,7 @@ export default {
   },
   methods: {
     handleResize() {
-      this.$emit("resize", true);
+      this.$emit("resize", navigator.virtualKeyboard.boundingRect.height);
       this.blockSwipe = false;
       this.panelHeight = this.$refs.panel.offsetHeight;
       this.panelHeaderHeight = this.$refs.panelHeader.offsetHeight;
@@ -260,6 +260,7 @@ export default {
 
       this.$nextTick(() => {
         try {
+          this.$emit("resize", navigator.virtualKeyboard.boundingRect.height);
           this.isMobile ? this.swipeToLevel("mid") : this.swipeToLevel("max");
         } catch (error) {
           throw new Error(`swipe panel on mounted | ${error.message}`);
