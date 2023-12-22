@@ -11,7 +11,15 @@ const toolbarHeight = computed(() => {
   return `calc(100% - 72px)`;
 });
 
-const isResized = ref(false);
+const keyboardHeight = ref(null);
+const initialHeight = ref(null);
+const visualHeight = ref(null);
+
+const handleResize = (payload) => {
+  keyboardHeight.value = payload.keyboardHeight;
+  initialHeight.value = payload.initHeight;
+  visualHeight.value = payload.visualHeight;
+};
 </script>
 
 <template>
@@ -92,11 +100,13 @@ const isResized = ref(false);
     <SwipePanel
       v-if="showPopup"
       @close="handleCloseButtonClicked"
-      @resize="(v) => (isResized = v)"
+      @resize="handleResize"
     >
       <template #header> Test </template>
       <template #body>
-        <p>isResized: {{ isResized }}</p>
+        <p>keyboard: {{ keyboardHeight }}</p>
+        <p>initial: {{ initialHeight }}</p>
+        <p>visual: {{ visualHeight }}</p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel
