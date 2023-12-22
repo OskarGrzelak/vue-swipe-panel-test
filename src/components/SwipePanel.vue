@@ -235,6 +235,14 @@ export default {
       console.log(window.visualViewport.height, this.initialHeight);
       console.log(this.isInitiallyPortrait, isPortrait);
       if (
+        "virtualKeyboard" in navigator &&
+        navigator.virtualKeyboard.boundingRect.height > 0
+      ) {
+        this.blockSwipe = true;
+        this.swipeToLevel("max");
+        return;
+      }
+      if (
         window.visualViewport.height < this.initialHeight &&
         this.isInitiallyPortrait === isPortrait
       ) {
