@@ -24,6 +24,17 @@ const handleResize = (payload) => {
   isInitiallyPortrait.value = payload.isInitiallyPortrait;
   isPortrait.value = payload.isPortrait;
 };
+
+const keyboardX = ref(null);
+const keyboardY = ref(null);
+const keyboardW = ref(null);
+const keyboardH = ref(null);
+const handleChangeGeometry = (payload) => {
+  keyboardX.value = payload.x;
+  keyboardY.value = payload.y;
+  keyboardW.value = payload.width;
+  keyboardH.value = payload.height;
+};
 </script>
 
 <template>
@@ -105,6 +116,7 @@ const handleResize = (payload) => {
       v-if="showPopup"
       @close="handleCloseButtonClicked"
       @resize="handleResize"
+      @change-geometry="handleChangeGeometry"
     >
       <template #header> Test </template>
       <template #body>
@@ -113,6 +125,10 @@ const handleResize = (payload) => {
         <p>visual: {{ visualHeight }}</p>
         <p>is init portrait: {{ isInitiallyPortrait }}</p>
         <p>is portrait: {{ isPortrait }}</p>
+        <p>x: {{ keyboardX }}</p>
+        <p>y: {{ keyboardY }}</p>
+        <p>width: {{ keyboardW }}</p>
+        <p>height: {{ keyboardH }}</p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
           elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel

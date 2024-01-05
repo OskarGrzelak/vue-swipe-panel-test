@@ -101,7 +101,7 @@ export default {
       default: null,
     },
   },
-  emits: ["close", "change-level", "resize"],
+  emits: ["close", "change-level", "resize", "change-geometry"],
   data() {
     return {
       mouseX: 0,
@@ -175,6 +175,12 @@ export default {
         console.log("y", y);
         console.log("width", width);
         console.log("height", height);
+        this.$emit("change-geometry", {
+          x: x,
+          y: y,
+          width: width,
+          height: height,
+        });
       });
     }
     this.isInitiallyPortrait = window.innerHeight > window.innerWidth;
