@@ -63,6 +63,7 @@
         ref="panelContent"
         class="h-full"
         :class="{ 'overflow-y-scroll': currentLevel === 'max' }"
+        :style="{ marginBottom: '250px' }"
       >
         <div class="relative px-2 h-full">
           <slot name="body" />
@@ -181,8 +182,9 @@ export default {
           height: height,
         });
 
-        if (height > 0) this.$refs.panelContent.style.paddingBottom = height + "px";
-        else this.$refs.panel.style.paddingBottom = 0;
+        if (height > 0)
+          this.$refs.panelContent.style.paddingBottom = height + "px";
+        else this.$refs.panelContent.style.paddingBottom = 0;
       });
     }
     this.isInitiallyPortrait = window.innerHeight > window.innerWidth;
