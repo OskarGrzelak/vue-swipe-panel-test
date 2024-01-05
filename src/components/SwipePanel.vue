@@ -181,7 +181,7 @@ export default {
           height: height,
         });
 
-        if (height > 0) this.$refs.panel.style.paddingBottom = height + "px";
+        if (height > 0) this.$refs.panelContent.style.paddingBottom = height + "px";
         else this.$refs.panel.style.paddingBottom = 0;
       });
     }
@@ -256,7 +256,7 @@ export default {
         return;
       }
       if (
-        window.visualViewport.height < this.initialHeight &&
+        window.visualViewport.height < this.initialHeight - 10 &&
         this.isInitiallyPortrait === isPortrait
       ) {
         this.blockSwipe = true;
