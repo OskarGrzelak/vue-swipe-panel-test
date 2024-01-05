@@ -167,7 +167,7 @@ export default {
   },
   mounted() {
     if ("virtualKeyboard" in navigator) {
-      navigator.virtualKeyboard.overlaysContent = true;
+      /* navigator.virtualKeyboard.overlaysContent = true; */
 
       navigator.virtualKeyboard.addEventListener("geometrychange", (event) => {
         const { x, y, width, height } = event.target.boundingRect;
@@ -182,9 +182,9 @@ export default {
           height: height,
         });
 
-        if (height > 0)
+        /* if (height > 0)
           this.$refs.panelContent.style.paddingBottom = height + "px";
-        else this.$refs.panelContent.style.paddingBottom = 0;
+        else this.$refs.panelContent.style.paddingBottom = 0; */
       });
     }
     this.isInitiallyPortrait = window.innerHeight > window.innerWidth;
@@ -237,7 +237,7 @@ export default {
   methods: {
     handleResize() {
       this.$emit("resize", {
-        keyboardHeight: navigator.virtualKeyboard?.boundingRect.height,
+        /* keyboardHeight: navigator.virtualKeyboard?.boundingRect.height, */
         initHeight: this.initialHeight,
         visualHeight: window.visualViewport.height,
         isInitiallyPortrait: this.isInitiallyPortrait,
@@ -249,14 +249,14 @@ export default {
       let isPortrait = window.innerHeight > window.innerWidth;
       console.log(window.visualViewport.height, this.initialHeight);
       console.log(this.isInitiallyPortrait, isPortrait);
-      if (
+      /* if (
         "virtualKeyboard" in navigator &&
         navigator.virtualKeyboard.boundingRect.height > 0
       ) {
         this.blockSwipe = true;
         this.swipeToLevel("max");
         return;
-      }
+      } */
       if (
         window.visualViewport.height < this.initialHeight - 10 &&
         this.isInitiallyPortrait === isPortrait
@@ -291,7 +291,7 @@ export default {
       this.$nextTick(() => {
         try {
           this.$emit("resize", {
-            keyboardHeight: navigator.virtualKeyboard?.boundingRect.height,
+            /* keyboardHeight: navigator.virtualKeyboard?.boundingRect.height, */
             initHeight: this.initialHeight,
             visualHeight: window.visualViewport.height,
             isInitiallyPortrait: this.isInitiallyPortrait,
