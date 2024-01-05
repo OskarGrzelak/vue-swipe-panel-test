@@ -171,6 +171,18 @@ const handleResize = (payload) => {
           pretium. Curabitur nulla sem, imperdiet a tincidunt et, dapibus sit
           amet dui.
         </p>
+        <input
+          type="text"
+          name="text2"
+          id="text2"
+          class="p-4 border border-slate-600"
+        />
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem
+          elit, vehicula vitae justo vel, cursus elementum ex. Fusce iaculis vel
+          est sit amet molestie. Nulla egestas eros ac sapien luctus blandit.
+          Sed imperdiet lorem lectus, sed facilisis ex varius sit amet.
+        </p>
       </template>
     </SwipePanel>
   </main>
