@@ -181,7 +181,7 @@ export default {
           height: height,
         });
 
-        if (x > 0) this.$refs.panel.style.paddingBottom = x + "px";
+        if (height > 0) this.$refs.panel.style.paddingBottom = height + "px";
         else this.$refs.panel.style.paddingBottom = 0;
       });
     }
